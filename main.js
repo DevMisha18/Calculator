@@ -1,8 +1,11 @@
+// Global variables
 let displayValue = '0';
 let firstNumber = '';
 let secondNumber = '';
 let operator = '';
 
+
+// Functions
 const add = (a, b) => a+b;
 const sub = (a, b) => a-b;
 const mul = (a, b) => a*b;
@@ -26,7 +29,7 @@ const updateDisplay = () => {
 }
 
 const appendToDisplay = (value) => {
-    if (!isNaN(value) || (value === '.' && ('.' in firstNumber || '.' in secondNumber))) {
+    if (!isNaN(value) || (value === '.' && !(firstNumber.includes('.') || secondNumber.includes('.')))) {
         if (operator === '') {
             firstNumber += value;
             displayValue = firstNumber;
@@ -64,7 +67,25 @@ const deleteLastCharacter = () => {
     updateDisplay();
 }
 
+const toggleSign = () => {
+    if (secondNumber !== '' && secondNumber !== '0') {
+        if (secondNumber.startsWith('-'))
+            secondNumber = secondNumber.slice(1);
+        else
+            secondNumber = '-' + secondNumber;
+        displayValue = secondNumber;
+    } else if (firstNumber !== '' && firstNumber !== '0') {
+        if (firstNumber.startsWith('-'))
+            firstNumber = firstNumber.slice(1);
+        else
+            firstNumber = '-' + firstNumber;
+        displayValue = firstNumber;
+    }
+    updateDisplay();
+}
 
+
+// Assigning eventListeners
 const buttons = [...document.querySelectorAll(".button")].filter(
     button => button.value !== '');
 buttons.forEach(button => button.addEventListener(
@@ -86,4 +107,7 @@ clearButton.addEventListener("click", clear);
 
 const delButton = document.querySelector(".button.del");
 delButton.addEventListener("click", () => deleteLastCharacter());
+
+const signButton = document.querySelector(".button.sign");
+signButton.addEventListener("click", () => toggleSign());
 
