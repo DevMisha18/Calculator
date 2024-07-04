@@ -48,3 +48,12 @@ body {
     border: 3px solid #b3f2ff;
     font-size: 48px;
 }
+
+.button:hover {
+    cursor: pointer;
+    background: #5b84d1;
+}
+
+.button:active {
+    background-color: #6b7be1;
+}

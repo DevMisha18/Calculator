@@ -26,7 +26,7 @@ const updateDisplay = () => {
 }
 
 const appendToDisplay = (value) => {
-    if (!isNaN(value) || value === '.') {
+    if (!isNaN(value) || (value === '.' && ('.' in firstNumber || '.' in secondNumber))) {
         if (operator === '') {
             firstNumber += value;
             displayValue = firstNumber;
@@ -38,7 +38,7 @@ const appendToDisplay = (value) => {
         if (operator === '')
             operator = value;
         else if (secondNumber !== '') {
-            displayValue = calculate(firstNumber, secondNumber, operator);
+            displayValue = calculate(firstNumber, secondNumber, operator).toString();
             firstNumber = displayValue;
             secondNumber = '';
             operator = value;
@@ -47,7 +47,22 @@ const appendToDisplay = (value) => {
     updateDisplay();
 }
 
+const clear = () => {
+    [displayValue, firstNumber, secondNumber, operator] = [0, '', '', ''];
+    updateDisplay();
+}
 
+const deleteLastCharacter = () => {
+    if (secondNumber !== '') {
+        secondNumber = secondNumber.slice(0, -1);
+        displayValue = secondNumber;
+    }
+    else if (firstNumber !== '') {
+        firstNumber = firstNumber.slice(0, -1);
+        displayValue = firstNumber;
+    }
+    updateDisplay();
+}
 
 
 const buttons = [...document.querySelectorAll(".button")].filter(
@@ -55,3 +70,20 @@ const buttons = [...document.querySelectorAll(".button")].filter(
 buttons.forEach(button => button.addEventListener(
     "click", () => appendToDisplay(button.value)
 ))
+
+const equalButton = document.querySelector("#\\=");
+equalButton.addEventListener("click", () => {
+    if (secondNumber !== '') {
+        displayValue = calculate(firstNumber, secondNumber, operator).toString();
+        firstNumber = displayValue;
+        [secondNumber, operator] = ['', ''];
+        updateDisplay();
+    }
+});
+
+const clearButton = document.querySelector(".button.clear");
+clearButton.addEventListener("click", clear);
+
+const delButton = document.querySelector(".button.del");
+delButton.addEventListener("click", () => deleteLastCharacter());
+
